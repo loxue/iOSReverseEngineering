@@ -49,7 +49,7 @@ class AMAntiAntiDebug(fb,FBCommand):
             ptrace.SetCondition('$x0==31')
         else:
             ptrace.SetCondition('$r0==31')
-        ptrace.SetScriptCallbackFunction('sys.modules[/'' + __name__ + '\'].ptrace_callback')
+        ptrace.SetScriptCallbackFunction('sys.modules['\' + __name__ + '\'].ptrace_callback')
         self.ptrace = ptrace
 
     def antiSyscall(self):
@@ -60,7 +60,7 @@ class AMAntiAntiDebug(fb,FBCommand):
             syscall.SetCondition('$x0==26 && (int *)$sp==31')
         else:
             syscall.SetCondition('$r0==26 && r1==31')
-            syscall.SetScriptCallbackFunction('sys.modules[\'' + __name__ + '\'].syscall_callback')
+            syscall.SetScriptCallbackFunction('sys.modules['\' + __name__ + '\'].syscall_callback')
             self.syscall = syscall
 
     def antiSysctl(self):
@@ -71,12 +71,12 @@ class AMAntiAntiDebug(fb,FBCommand):
             sysctl.SetCondition('$x1==4 && *(int *)$x0==1 && *(int *)($x0+4)==14 && *(int *)($x0+8)==1')
         else:
             sysctl.SetCondition('$r1==4 && *(int *)$r0==1 && *(int *)($r0+4)==14 && *(int *)($r0+8)==1')
-            sysctl.SetScriptCallbackFunction('sys.modules[\'' + __name__ + '\'].sysctl_callback')
+            sysctl.SetScriptCallbackFunction('sys.modules['\' + __name__ + '\'].sysctl_callback')
             self.sysctl = sysctl
 
     def antiExit(self):
         self.exit = lldb.debugger.GetSelectedTarget().BreakpointCreateByName("exit")
-        exit.SetScriptCallbackFunction('sys.modules[\'' + __name__ + '\'].exit_callback')
+        exit.SetScriptCallbackFunction('sys.modules['\' + __name__ + '\'].exit_callback')
 
 #暂时只考虑ARMv7和ARM64
 def is64Bit():
